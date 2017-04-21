@@ -4,9 +4,9 @@
 using Microsoft.Azure.Management.Compute.Fluent;
 using Microsoft.Azure.Management.Compute.Fluent.Models;
 using Microsoft.Azure.Management.Fluent;
-using Microsoft.Azure.Management.Resource.Fluent;
-using Microsoft.Azure.Management.Resource.Fluent.Authentication;
-using Microsoft.Azure.Management.Resource.Fluent.Core;
+using Microsoft.Azure.Management.ResourceManager.Fluent;
+using Microsoft.Azure.Management.ResourceManager.Fluent.Authentication;
+using Microsoft.Azure.Management.ResourceManager.Fluent.Core;
 using Microsoft.Azure.Management.Samples.Common;
 using System;
 using System.Collections.Generic;
@@ -48,7 +48,7 @@ namespace ManageVirtualMachineExtension
         readonly static string mySqlScriptWindowsInstallCommand = "powershell.exe -ExecutionPolicy Unrestricted -File installMySQL.ps1";
         readonly static List<string> mySQLWindowsInstallScriptFileUris = new List<string>()
         {
-            "https://raw.githubusercontent.com/Azure/azure-sdk-for-net/Fluent/Samples/ResourceManagement/Compute/ManageVirtualMachineExtension/Assets/installMySQL.ps1"
+            "https://raw.githubusercontent.com/Azure-Samples/compute-dotnet-manage-virtual-machine-using-vm-extensions/master/Assets/installMySQL.ps1"
         };
 
         readonly static string linuxVmAccessExtensionName = "VMAccessForLinux";
@@ -100,8 +100,8 @@ namespace ManageVirtualMachineExtension
                         .WithRegion(Region.USEast)
                         .WithNewResourceGroup(rgName)
                         .WithNewPrimaryNetwork("10.0.0.0/28")
-                        .WithPrimaryPrivateIpAddressDynamic()
-                        .WithNewPrimaryPublicIpAddress(pipDnsLabelLinuxVM)
+                        .WithPrimaryPrivateIPAddressDynamic()
+                        .WithNewPrimaryPublicIPAddress(pipDnsLabelLinuxVM)
                         .WithPopularLinuxImage(KnownLinuxVirtualMachineImage.UbuntuServer14_04_Lts)
                         .WithRootUsername(FirstLinuxUserName)
                         .WithRootPassword(FirstLinuxUserPassword)
@@ -199,8 +199,8 @@ namespace ManageVirtualMachineExtension
                         .WithRegion(Region.USEast)
                         .WithExistingResourceGroup(rgName)
                         .WithNewPrimaryNetwork("10.0.0.0/28")
-                        .WithPrimaryPrivateIpAddressDynamic()
-                        .WithNewPrimaryPublicIpAddress(pipDnsLabelWindowsVM)
+                        .WithPrimaryPrivateIPAddressDynamic()
+                        .WithNewPrimaryPublicIPAddress(pipDnsLabelWindowsVM)
                         .WithPopularWindowsImage(KnownWindowsVirtualMachineImage.WindowsServer2012R2Datacenter)
                         .WithAdminUsername(firstWindowsUserName)
                         .WithAdminPassword(firstWindowsUserPassword)
@@ -292,7 +292,7 @@ namespace ManageVirtualMachineExtension
 
                 var azure = Azure
                     .Configure()
-                    .WithLogLevel(HttpLoggingDelegatingHandler.Level.BASIC)
+                    .WithLogLevel(HttpLoggingDelegatingHandler.Level.Basic)
                     .Authenticate(credentials)
                     .WithDefaultSubscription();
 

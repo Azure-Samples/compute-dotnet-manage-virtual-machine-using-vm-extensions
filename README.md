@@ -4,7 +4,7 @@ platforms: .Net
 author: anuchandy
 ---
 
-#Getting Started with Compute - Manage Virtual Machine Extension - in .Net #
+# Getting Started with Compute - Manage Virtual Machine Extension - in .Net #
 
           Azure Compute sample for managing virtual machine extensions. -
            - Create a Linux and Windows virtual machine
