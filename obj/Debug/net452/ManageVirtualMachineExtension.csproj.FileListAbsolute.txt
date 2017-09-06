@@ -1,4 +1,0 @@
-C:\Sources\dotnet-samples\compute-dotnet-manage-virtual-machine-using-vm-extensions\bin\Debug\net452\ManageVirtualMachineExtension.runtimeconfig.json
-C:\Sources\dotnet-samples\compute-dotnet-manage-virtual-machine-using-vm-extensions\bin\Debug\net452\ManageVirtualMachineExtension.runtimeconfig.dev.json
-C:\Sources\dotnet-samples\compute-dotnet-manage-virtual-machine-using-vm-extensions\obj\Debug\net452\ManageVirtualMachineExtension.csproj.ManageVirtualMachineExtension.exe.config
-C:\Sources\dotnet-samples\compute-dotnet-manage-virtual-machine-using-vm-extensions\obj\Debug\net452\ManageVirtualMachineExtension.csproj.CoreCompileInputs.cache
