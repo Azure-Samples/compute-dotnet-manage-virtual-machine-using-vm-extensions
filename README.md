@@ -1,7 +1,9 @@
 ---
 page_type: sample
-languages: java
-products: azure
+languages:
+- java
+products:
+- azure
 services: Compute
 platforms: dotnet
 author: yaohaizh
@@ -27,9 +29,9 @@ Set the environment variable `AZURE_AUTH_LOCATION` with the full path for an aut
     git clone https://github.com/Azure-Samples/compute-dotnet-manage-virtual-machine-using-vm-extensions.git
 
     cd compute-dotnet-manage-virtual-machine-using-vm-extensions
-  
+
     dotnet build
-    
+
     bin\Debug\net452\ManageVirtualMachineExtension.exe
 
 ## More information ##
