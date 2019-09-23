@@ -7,6 +7,7 @@ products:
 extensions:
 - services: Compute
 - platforms: dotnet
+description: "Azure Compute sample for managing virtual machine extensions."
 ---
 
 # Getting started on managing virtual machines using vm extensions in C# #
