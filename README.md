@@ -4,13 +4,16 @@ languages:
 - csharp
 products:
 - azure
+- azure-virtual-machines
+- dotnet
 extensions:
 - services: Compute
 - platforms: dotnet
 description: "Azure Compute sample for managing virtual machine extensions."
+urlFragment: getting-started-on-managing-virtual-machines-using-vm-extensions-in-c
 ---
 
-# Getting started on managing virtual machines using vm extensions in C# #
+# Get started managing Azure Virtual Machines using VM extensions (C#)
 
 Azure Compute sample for managing virtual machine extensions.
 
@@ -22,7 +25,7 @@ Azure Compute sample for managing virtual machine extensions.
 - Remove extensions
 
 
-## Running this Sample ##
+## Running this sample
 
 To run this sample:
 
