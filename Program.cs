@@ -10,6 +10,7 @@ using Microsoft.Azure.Management.ResourceManager.Fluent.Core;
 using Microsoft.Azure.Management.Samples.Common;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ManageVirtualMachineExtension
 {
@@ -82,7 +83,7 @@ namespace ManageVirtualMachineExtension
          *  - Install MySQL on Linux | something significant on Windows
          *  - Remove extensions
          */
-        public static void RunSample(IAzure azure)
+        public static async Task RunSampleAsync(IAzure azure)
         {
             string rgName = SdkContext.RandomResourceName("rgCOVE", 15);
             string linuxVmName = SdkContext.RandomResourceName("lVM", 10);
@@ -96,7 +97,7 @@ namespace ManageVirtualMachineExtension
                 // Create a Linux VM with root (sudo) user
                 Utilities.Log("Creating a Linux VM");
 
-                IVirtualMachine linuxVM = azure.VirtualMachines.Define(linuxVmName)
+                IVirtualMachine linuxVM = await azure.VirtualMachines.Define(linuxVmName)
                         .WithRegion(Region.USEast)
                         .WithNewResourceGroup(rgName)
                         .WithNewPrimaryNetwork("10.0.0.0/28")
@@ -106,7 +107,7 @@ namespace ManageVirtualMachineExtension
                         .WithRootUsername(FirstLinuxUserName)
                         .WithRootPassword(FirstLinuxUserPassword)
                         .WithSize(VirtualMachineSizeTypes.StandardD3V2)
-                        .Create();
+                        .CreateAsync();
 
                 Utilities.Log("Created a Linux VM:" + linuxVM.Id);
                 Utilities.PrintVirtualMachine(linuxVM);
@@ -114,7 +115,7 @@ namespace ManageVirtualMachineExtension
                 //=============================================================
                 // Add a second sudo user to Linux VM using VMAccess extension
 
-                linuxVM.Update()
+                await linuxVM.Update()
                         .DefineNewExtension(linuxVmAccessExtensionName)
                             .WithPublisher(linuxVmAccessExtensionPublisherName)
                             .WithType(linuxVmAccessExtensionTypeName)
@@ -123,20 +124,20 @@ namespace ManageVirtualMachineExtension
                             .WithProtectedSetting("password", SecondLinuxUserPassword)
                             .WithProtectedSetting("expiration", SecondLinuxUserExpiration)
                             .Attach()
-                        .Apply();
+                        .ApplyAsync();
 
                 Utilities.Log("Added a second sudo user to the Linux VM");
 
                 //=============================================================
                 // Add a third sudo user to Linux VM by updating VMAccess extension
 
-                linuxVM.Update()
+                await linuxVM.Update()
                         .UpdateExtension(linuxVmAccessExtensionName)
                             .WithProtectedSetting("username", ThirdLinuxUserName)
                             .WithProtectedSetting("password", ThirdLinuxUserPassword)
                             .WithProtectedSetting("expiration", ThirdLinuxUserExpiration)
                         .Parent()
-                        .Apply();
+                        .ApplyAsync();
 
                 Utilities.Log("Added a third sudo user to the Linux VM");
 
@@ -144,29 +145,29 @@ namespace ManageVirtualMachineExtension
                 //=============================================================
                 // Reset ssh password of first user of Linux VM by updating VMAccess extension
 
-                linuxVM.Update()
+                await linuxVM.Update()
                         .UpdateExtension(linuxVmAccessExtensionName)
                             .WithProtectedSetting("username", FirstLinuxUserName)
                             .WithProtectedSetting("password", FirstLinuxUserNewPassword)
                             .WithProtectedSetting("reset_ssh", "true")
                         .Parent()
-                        .Apply();
+                        .ApplyAsync();
 
                 Utilities.Log("Password of first user of Linux VM has been updated");
 
                 //=============================================================
                 // Removes the second sudo user from Linux VM using VMAccess extension
 
-                linuxVM.Update()
+                await linuxVM.Update()
                         .UpdateExtension(linuxVmAccessExtensionName)
                             .WithProtectedSetting("remove_user", SecondLinuxUserName)
                         .Parent()
-                        .Apply();
+                        .ApplyAsync();
 
                 //=============================================================
                 // Install MySQL in Linux VM using CustomScript extension
 
-                linuxVM.Update()
+                await linuxVM.Update()
                         .DefineNewExtension(LinuxCustomScriptExtensionName)
                             .WithPublisher(LinuxCustomScriptExtensionPublisherName)
                             .WithType(LinuxCustomScriptExtensionTypeName)
@@ -175,7 +176,7 @@ namespace ManageVirtualMachineExtension
                             .WithPublicSetting("fileUris", MySQLLinuxInstallScriptFileUris)
                             .WithPublicSetting("commandToExecute", MySqlScriptLinuxInstallCommand)
                         .Attach()
-                        .Apply();
+                        .ApplyAsync();
 
                 Utilities.Log("Installed MySql using custom script extension");
                 Utilities.PrintVirtualMachine(linuxVM);
@@ -183,10 +184,10 @@ namespace ManageVirtualMachineExtension
                 //=============================================================
                 // Removes the extensions from Linux VM
 
-                linuxVM.Update()
+                await linuxVM.Update()
                         .WithoutExtension(LinuxCustomScriptExtensionName)
                         .WithoutExtension(linuxVmAccessExtensionName)
-                        .Apply();
+                        .ApplyAsync();
                 Utilities.Log("Removed the custom script and VM Access extensions from Linux VM");
                 Utilities.PrintVirtualMachine(linuxVM);
 
@@ -195,7 +196,7 @@ namespace ManageVirtualMachineExtension
 
                 Utilities.Log("Creating a Windows VM");
 
-                IVirtualMachine windowsVM = azure.VirtualMachines.Define(windowsVmName)
+                IVirtualMachine windowsVM = await azure.VirtualMachines.Define(windowsVmName)
                         .WithRegion(Region.USEast)
                         .WithExistingResourceGroup(rgName)
                         .WithNewPrimaryNetwork("10.0.0.0/28")
@@ -213,7 +214,7 @@ namespace ManageVirtualMachineExtension
                             .WithPublicSetting("fileUris", mySQLWindowsInstallScriptFileUris)
                             .WithPublicSetting("commandToExecute", mySqlScriptWindowsInstallCommand)
                         .Attach()
-                        .Create();
+                        .CreateAsync();
 
                 Utilities.Log("Created a Windows VM:" + windowsVM.Id);
                 Utilities.PrintVirtualMachine(windowsVM);
@@ -221,7 +222,7 @@ namespace ManageVirtualMachineExtension
                 //=============================================================
                 // Add a second admin user to Windows VM using VMAccess extension
 
-                windowsVM.Update()
+                await windowsVM.Update()
                         .DefineNewExtension(windowsVmAccessExtensionName)
                             .WithPublisher(windowsVmAccessExtensionPublisherName)
                             .WithType(windowsVmAccessExtensionTypeName)
@@ -229,40 +230,40 @@ namespace ManageVirtualMachineExtension
                             .WithProtectedSetting("username", secondWindowsUserName)
                             .WithProtectedSetting("password", secondWindowsUserPassword)
                         .Attach()
-                        .Apply();
+                        .ApplyAsync();
 
                 Utilities.Log("Added a second admin user to the Windows VM");
 
                 //=============================================================
                 // Add a third admin user to Windows VM by updating VMAccess extension
 
-                windowsVM.Update()
+                await windowsVM.Update()
                         .UpdateExtension(windowsVmAccessExtensionName)
                             .WithProtectedSetting("username", thirdWindowsUserName)
                             .WithProtectedSetting("password", thirdWindowsUserPassword)
                         .Parent()
-                        .Apply();
+                        .ApplyAsync();
 
                 Utilities.Log("Added a third admin user to the Windows VM");
 
                 //=============================================================
                 // Reset admin password of first user of Windows VM by updating VMAccess extension
 
-                windowsVM.Update()
+                await windowsVM.Update()
                         .UpdateExtension(windowsVmAccessExtensionName)
                             .WithProtectedSetting("username", firstWindowsUserName)
                             .WithProtectedSetting("password", firstWindowsUserNewPassword)
                         .Parent()
-                        .Apply();
+                        .ApplyAsync();
 
                 Utilities.Log("Password of first user of Windows VM has been updated");
 
                 //=============================================================
                 // Removes the extensions from Linux VM
 
-                windowsVM.Update()
+                await windowsVM.Update()
                         .WithoutExtension(windowsVmAccessExtensionName)
-                        .Apply();
+                        .ApplyAsync();
                 Utilities.Log("Removed the VM Access extensions from Windows VM");
                 Utilities.PrintVirtualMachine(windowsVM);
             }
@@ -271,7 +272,7 @@ namespace ManageVirtualMachineExtension
                 try
                 {
                     Utilities.Log("Deleting Resource Group: " + rgName);
-                    azure.ResourceGroups.DeleteByName(rgName);
+                    await azure.ResourceGroups.DeleteByNameAsync(rgName);
                     Utilities.Log("Deleted Resource Group: " + rgName);
                 }
                 catch (Exception ex)
@@ -281,9 +282,8 @@ namespace ManageVirtualMachineExtension
             }
         }
 
-        public static void Main(string[] args)
+        public static async Task Main()
         {
-
             try
             {
                 //=============================================================
@@ -299,7 +299,7 @@ namespace ManageVirtualMachineExtension
                 // Print selected subscription
                 Utilities.Log("Selected subscription: " + azure.SubscriptionId);
 
-                RunSample(azure);
+                await RunSampleAsync(azure);
             }
             catch (Exception ex)
             {
