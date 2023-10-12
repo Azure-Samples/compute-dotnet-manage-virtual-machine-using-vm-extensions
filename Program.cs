@@ -142,7 +142,7 @@ namespace ManageVirtualMachineExtension
                 };
                 var publicIPAddressLro = await publicAddressIPCollection.CreateOrUpdateAsync(WaitUntil.Completed, publicIPAddressName, publicIPAddressdata);
                 var publicIPAddress = publicIPAddressLro.Value;
-                Utilities.Log("Creating a Linux Public IP address with name : " + publicIPAddress.Data.Name);
+                Utilities.Log("Created a Linux Public IP address with name : " + publicIPAddress.Data.Name);
 
                 //Create a subnet
                 Utilities.Log("Creating a Linux subnet...");
@@ -384,7 +384,7 @@ namespace ManageVirtualMachineExtension
                 };
                 var windowsPublicIPAddressLro = await windowsPublicAddressIPCollection.CreateOrUpdateAsync(WaitUntil.Completed, windowsPublicIPAddressName, windowsPublicIPAddressdata);
                 var windowsPublicIPAddress = windowsPublicIPAddressLro.Value;
-                Utilities.Log("Creating a windows Public IP address with name : " + windowsPublicIPAddress.Data.Name);
+                Utilities.Log("Created a windows Public IP address with name : " + windowsPublicIPAddress.Data.Name);
 
                 //Create a subnet
                 Utilities.Log("Creating a windows subnet...");
@@ -406,7 +406,7 @@ namespace ManageVirtualMachineExtension
                 Utilities.Log("Created a windows subnet2 with name : " + windowsSubnet.Data.Name);
 
                 //Create a networkInterface
-                Utilities.Log("Created a windows networkInterface");
+                Utilities.Log("Creating a windows networkInterface");
                 var windowsNetworkInterfaceData = new NetworkInterfaceData()
                 {
                     Location = AzureLocation.EastUS,
